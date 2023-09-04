@@ -23,8 +23,9 @@ function App() {
     setSocket(newSocket);
 
     return () => {
-      // Clean up WebSocket connection when the component unmounts
-      newSocket.close();
+      if (socket) {
+        socket.close();
+      }
     };
   }, []);
 
