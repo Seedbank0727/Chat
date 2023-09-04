@@ -27,8 +27,14 @@
     <title>React App</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <input type="text" placeholder="보낼 메세지를 입력하세요." class="content">
+    <button type="button" value="전송" class="sendBtn" onclick="sendMsg()">전송</button>
+<div>
+    <span>메세지</span>
+    <div class="msgArea"></div>
+</div>
+    <!-- <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div> -->
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -39,5 +45,29 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+        let socket = new WebSocket("ws://localhost:8081/websocket");
+
+        socket.onopen = function (e) {
+            console.log('open server!')
+        };
+
+        socket.onerror = function (e){
+            console.log(e);
+        }
+        
+        socket.onmessage = function (e) {
+            console.log(e.data);
+            let msgArea = document.querySelector('.msgArea');
+            let newMsg = document.createElement('div');
+            newMsg.innerText=e.data;
+            msgArea.append(newMsg);
+        }
+
+        function sendMsg() {
+            let content=document.querySelector('.content').value;
+            socket.send(content);
+        }
+</script>
   </body>
 </html>
